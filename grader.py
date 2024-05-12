@@ -192,13 +192,13 @@ def verify_schedule(bulletin, profile, schedule, checkUnits = True):
     # No course can be taken twice.
     goodSchedule *= len(all_courses_taking) == len(schedule)
     if not goodSchedule:
-        print 'course repeated'
+        print('course repeated')
         return False
 
     # Each course must be offered in that quarter.
     goodSchedule *= all(bulletin.courses[s[1]].is_offered_in(s[0]) for s in schedule)
     if not goodSchedule:
-        print 'course not offered'
+        print('course not offered')
         return False
 
     # If specified, only take the course at the requested time.
@@ -206,7 +206,7 @@ def verify_schedule(bulletin, profile, schedule, checkUnits = True):
         if len(req.quarters) == 0: continue
         goodSchedule *= all([s[0] in req.quarters for s in schedule if s[1] in req.cids])
     if not goodSchedule:
-        print 'course taken at wrong time'
+        print('course taken at wrong time')
         return False
 
     # If a request has multiple courses, at most one is chosen.
@@ -214,7 +214,7 @@ def verify_schedule(bulletin, profile, schedule, checkUnits = True):
         if len(req.cids) == 1: continue
         goodSchedule *= len([s for s in schedule if s[1] in req.cids]) <= 1
     if not goodSchedule:
-        print 'more than one exclusive group of courses is taken'
+        print('more than one exclusive group of courses is taken')
         return False
 
     # Must take a course after the prereqs
@@ -227,12 +227,12 @@ def verify_schedule(bulletin, profile, schedule, checkUnits = True):
             if prereq in profile.taking:
                 goodSchedule *= prereq in all_courses_taking
                 if not goodSchedule:
-                    print 'not all prereqs are taken'
+                    print('not all prereqs are taken')
                     return False
                 goodSchedule *= profile.quarters.index(quarter) > \
                     profile.quarters.index(all_courses_taking[prereq])
     if not goodSchedule:
-        print 'course is taken before prereq'
+        print('course is taken before prereq')
         return False
 
     if not checkUnits: return goodSchedule
@@ -243,7 +243,7 @@ def verify_schedule(bulletin, profile, schedule, checkUnits = True):
     goodSchedule *= all(profile.minUnits <= u and u <= profile.maxUnits \
         for k, u in unitCounters.items())
     if not goodSchedule:
-        print 'unit count out of bound for quarter'
+        print('unit count out of bound for quarter')
         return False
 
     return goodSchedule

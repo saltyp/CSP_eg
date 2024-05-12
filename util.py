@@ -19,7 +19,7 @@ class CSP:
 
         # Each entry is a unary factor table for the corresponding variable.
         # The factor table corresponds to the weight distribution of a variable
-        # for all added unary factor functions. If there's no unary function for 
+        # for all added unary factor functions. If there's no unary function for
         # a variable K, there will be no entry for K in unaryFactors.
         # E.g. if B \in ['a', 'b'] is a variable, and we added two
         # unary factor functions f1, f2 for B,
@@ -54,7 +54,6 @@ class CSP:
         self.unaryFactors[var] = None
         self.binaryFactors[var] = dict()
 
-
     def get_neighbor_vars(self, var):
         """
         Returns a list of variables which are neighbors of |var|.
@@ -86,7 +85,7 @@ class CSP:
         had binaryFactors added earlier, they will be *merged* through element
         wise multiplication.
 
-        How to get binary factor value given a variable |var1| with value |val1| 
+        How to get binary factor value given a variable |var1| with value |val1|
         and variable |var2| with value |val2|?
         => csp.binaryFactors[var1][var2][val1][val2]
         """
@@ -94,11 +93,11 @@ class CSP:
         try:
             assert var1 != var2
         except:
-            print '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-            print '!! Tip:                                                                       !!'
-            print '!! You are adding a binary factor over a same variable...                  !!'
-            print '!! Please check your code and avoid doing this.                               !!'
-            print '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            print('!! Tip:                                                                       !!')
+            print('!! You are adding a binary factor over a same variable...                  !!')
+            print('!! Please check your code and avoid doing this.                               !!')
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
             raise
 
         self.update_binary_factor_table(var1, var2,
@@ -302,7 +301,8 @@ class Request:
 
     def __eq__(self, other): return str(self) == str(other)
 
-    def __cmp__(self, other): return cmp(str(self), str(other))
+    def __cmp__(self, other):
+        return (str(self) > str(other)) - (str(self) < str(other))
 
     def __hash__(self): return hash(str(self))
 
@@ -412,18 +412,18 @@ class Profile:
                     elif prereq_cid in self.taking:
                         if prereq_cid not in req.prereqs:
                             req.prereqs.append(prereq_cid)
-                            print "INFO: Additional prereqs inferred: %s after %s" % \
-                                (cid, prereq_cid)
+                            print("INFO: Additional prereqs inferred: %s after %s" % \
+                                (cid, prereq_cid))
                     else:
-                        print "WARNING: missing prerequisite of %s -- %s; you should add it as 'taken' or 'request'" %  \
-                            (cid, self.bulletin.courses[prereq_cid].short_str())
+                        print("WARNING: missing prerequisite of %s -- %s; you should add it as 'taken' or 'request'" %  \
+                            (cid, self.bulletin.courses[prereq_cid].short_str()))
 
     def print_info(self):
-        print "Units: %d-%d" % (self.minUnits, self.maxUnits)
-        print "Quarter: %s" % self.quarters
-        print "Taken: %s" % self.taken
-        print "Requests:"
-        for req in self.requests: print '  %s' % req
+        print("Units: %d-%d" % (self.minUnits, self.maxUnits))
+        print("Quarter: %s" % self.quarters)
+        print("Taken: %s" % self.taken)
+        print("Requests:")
+        for req in self.requests: print('  %s' % req)
 
     def ensure_course_id(self, cid):
         if cid not in self.bulletin.courses:
@@ -470,12 +470,12 @@ def print_course_scheduling_solution(solution):
     """
 
     if solution == None:
-        print "No schedule found that satisfied all the constraints."
+        print("No schedule found that satisfied all the constraints.")
     else:
-        print "Here's the best schedule:"
-        print "Quarter\t\tUnits\tCourse"
+        print("Here's the best schedule:")
+        print("Quarter\t\tUnits\tCourse")
         for quarter, course, units in solution:
             if units != None:
-                print "  %s\t%s\t%s" % (quarter, units, course)
+                print("  %s\t%s\t%s" % (quarter, units, course))
             else:
-                print "  %s\t%s\t%s" % (quarter, 'None', course)
+                print("  %s\t%s\t%s" % (quarter, 'None', course))

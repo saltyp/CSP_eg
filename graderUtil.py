@@ -75,7 +75,7 @@ class TimeoutFunction:
         self.function = function
 
     def handle_maxSeconds(self, signum, frame):
-        print 'TIMEOUT!'
+        print('TIMEOUT!')
         raise TimeoutFunctionException()
 
     def __call__(self, *args):
@@ -106,7 +106,7 @@ class Part:
         if maxSeconds != None and not isinstance(maxSeconds, int):
             raise Exception("Invalid maxSeconds: %s" % maxSeconds)
         if not description:
-            print 'ERROR: description required for part {}'.format(name)
+            print('ERROR: description required for part {}'.format(name))
         # Specification of part
         self.name = name
         self.gradeFunc = gradeFunc  # Function to call to do grading
@@ -194,7 +194,7 @@ class Grader:
     def load(self, moduleName):
         try:
             return __import__(moduleName)
-        except Exception, e:
+        except Exception as e:
             self.fail("Threw exception when importing '%s': %s" % (moduleName, e))
             self.fatalError = True
             return None
@@ -204,7 +204,7 @@ class Grader:
             return None
 
     def gradePart(self, part):
-        print '----- START PART %s%s: %s' % (part.name, ' (extra credit)' if part.extraCredit else '', part.description)
+        print('----- START PART %s%s: %s' % (part.name, ' (extra credit)' if part.extraCredit else '', part.description))
         self.currentPart = part
 
         startTime = datetime.datetime.now()
@@ -232,8 +232,8 @@ class Grader:
             displayPoints = '???/%s points (hidden test ungraded)' % part.maxPoints
         else:
             displayPoints = '%s/%s points' % (part.points, part.maxPoints)
-        print '----- END PART %s [took %s (max allowed %s seconds), %s]' % (part.name, endTime - startTime, part.maxSeconds, displayPoints)
-        print
+        print('----- END PART %s [took %s (max allowed %s seconds), %s]' % (part.name, endTime - startTime, part.maxSeconds, displayPoints))
+        print('')
 
     def getSelectedParts(self):
         parts = []
@@ -260,7 +260,7 @@ class Grader:
 
         # Grade it!
         if not self.params.summary and not self.fatalError:
-            print '========== START GRADING'
+            print('========== START GRADING')
             for part in parts:
                 self.gradePart(part)
 
@@ -273,11 +273,11 @@ class Grader:
             maxExtraCredit = sum(part.maxPoints for part in activeParts if part.extraCredit)
 
             if not self.useSolution:
-                print 'Note that the hidden test cases do not check for correctness.' \
+                print('Note that the hidden test cases do not check for correctness.' \
                 '\nThey are provided for you to verify that the functions do not crash and run within the time limit.' \
-                '\nPoints for these parts not assigned by the grader (indicated by "--").'
-            print '========== END GRADING [%d/%d points + %d/%d extra credit]' % \
-                (totalPoints, maxTotalPoints, extraCredit, maxExtraCredit)
+                '\nPoints for these parts not assigned by the grader (indicated by "--").')
+            print('========== END GRADING [%d/%d points + %d/%d extra credit]' % \
+                (totalPoints, maxTotalPoints, extraCredit, maxExtraCredit))
 
         resultParts = []
         for part in parts:
@@ -307,10 +307,10 @@ class Grader:
             maxBasicPoints = sum(part.maxPoints for part in parts if part.is_basic())
             maxHiddenPoints = sum(part.maxPoints for part in parts if part.is_hidden())
             maxManualPoints = sum(part.maxPoints for part in parts if part.is_manual())
-            print "Total %s (basic auto/coding + hidden auto/coding + manual/written): %d + %d + %d = %d" % \
+            print("Total %s (basic auto/coding + hidden auto/coding + manual/written): %d + %d + %d = %d" % \
                 (name,
                 maxBasicPoints, maxHiddenPoints, maxManualPoints, \
-                maxBasicPoints + maxHiddenPoints + maxManualPoints)
+                maxBasicPoints + maxHiddenPoints + maxManualPoints))
         if self.params.summary:
             display('points', False)
             display('extra credit', True)
@@ -320,12 +320,12 @@ class Grader:
             path = 'grader-{}.json'.format(mode)
             with open(path, 'w') as out:
                 print >>out, json.dumps(result)
-            print 'Wrote to %s' % path
+            print('Wrote to %s' % path)
         if self.params.js:
             path = 'grader-{}.js'.format(mode)
             with open(path, 'w') as out:
-                print >>out, 'var ' + mode + 'Result = '+ json.dumps(result) + ';'
-            print 'Wrote to %s' % path
+                print >> out, 'var ' + mode + 'Result = '+ json.dumps(result) + ';'
+            print('Wrote to %s' % path)
 
     # Called by the grader to modify state of the current part
 
@@ -388,7 +388,7 @@ class Grader:
             return self.fail("Expected to be true, but got false" )
 
     def fail(self, message):
-        print 'FAIL:', message
+        print('FAIL:', message)
         self.addMessage(message)
         if self.currentPart:
             self.currentPart.points = 0
@@ -402,7 +402,7 @@ class Grader:
 
     def addMessage(self, message):
         if not self.useSolution:
-            print message
+            print(message)
         if self.currentPart:
             self.currentPart.messages.append(message)
         else:
